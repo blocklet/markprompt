@@ -14,8 +14,6 @@ import { ManagedAppContext } from '@/lib/context/app';
 import { ManagedTrainingContext } from '@/lib/context/training';
 import * as Fathom from 'fathom-client';
 import { useRouter } from 'next/router';
-import { PlainProvider } from '@team-plain/react-chat-ui';
-import { ChatWindow, plainTheme } from '@/components/user/ChatWindow';
 import { getHost } from '@/lib/utils';
 
 interface CustomAppProps<P = {}> extends AppProps<P> {
@@ -63,13 +61,11 @@ export default function App({ Component, pageProps }: CustomAppProps) {
           supabaseClient={supabase}
           initialSession={(pageProps as any).initialSession}
         >
-          <ManagedPlainProvider>
             <ManagedAppContext>
               <ManagedTrainingContext>
                 <Component {...pageProps}></Component>
               </ManagedTrainingContext>
             </ManagedAppContext>
-          </ManagedPlainProvider>
         </SessionContextProvider>
       </ThemeProvider>
       <Toaster />
@@ -78,20 +74,5 @@ export default function App({ Component, pageProps }: CustomAppProps) {
 }
 
 export const ManagedPlainProvider = ({ children }: { children: ReactNode }) => {
-  const session = useSession();
-
-  return (
-    <PlainProvider
-      appKey={process.env.NEXT_PUBLIC_PLAIN_APP_KEY!}
-      customer={
-        session?.user
-          ? { type: 'logged-in', getCustomerJwt }
-          : { type: 'logged-out' }
-      }
-      theme={plainTheme}
-    >
-      {children}
-      <ChatWindow />
-    </PlainProvider>
-  );
+  return children;
 };
