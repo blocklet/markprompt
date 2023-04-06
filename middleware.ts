@@ -21,7 +21,7 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     return AppMiddleware(req);
   }
 
-  if (hostname === 'api.markprompt.com' || hostname === 'api.localhost:3000') {
+  if (hostname === getHost('api') || hostname === 'api.localhost:3000') {
     const path = req.nextUrl.pathname;
 
     if (
